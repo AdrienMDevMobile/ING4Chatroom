@@ -1,10 +1,16 @@
 package serveur;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageSender {
+import main.ModelMessage;
+
+public class MessageSender  {
 
 	private List<Socket> socketList;
 	
@@ -14,5 +20,32 @@ public class MessageSender {
 	
 	
 	
+	//Lecture d ela liste de socket
+	public void listReader(ModelMessage model) throws IOException{
+		
+		
+		for(int i = 0; i < socketList.size(); i++){
+			
+			Socket s = socketList.get(i);
+			sendMessage(model,s);
+			
+		}
+		
+	}
+		
+		
+	
+	
+		public void sendMessage(ModelMessage objectMessage, Socket s) throws IOException{
+			
+
+			//Utilisation de la socket dans la liste des sockets
+	         OutputStream envoiAuClient = s.getOutputStream();
+	         ObjectOutputStream out = new ObjectOutputStream(envoiAuClient);
+	         
+	         //Envoi de l'objet message au client
+	         out.writeObject(objectMessage);
+			
+		}
 	
 }
