@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -120,14 +122,58 @@ con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "");
 	con.close();
 	
 }
+
+
+
+
+public static void recuperationBooking() throws SQLException{
+	
+	List<Integer> list = new ArrayList<Integer>();
+	
+	Statement stmt = null;
+	Connection con = null;
+	
+	con = DriverManager.getConnection("jdbc:mysql://localhost/booking" , "root" , ""); 
+	
+	stmt = con.createStatement();
+	
+	
+
+	JSONArray jarray = new JSONArray();
+	
+
+	
+	String requete = "SELECT SEAT FROM  BOOKINGS WHERE CUSTOMER IS NULL";
+	ResultSet rs = stmt.executeQuery(requete);
+    //STEP 5: Extract data from result set
+    while(rs.next()){
+    	
+    	System.out.println(rs.getInt("SEAT"));
+       //Retrieve by column name
+       list.add((rs.getInt("SEAT")));
+
+    }
+   
+    
+    
+	
+	stmt.close();
+	con.close();
+	
+}
 	
 	
 	public static void main(String[] args) throws Exception  {
 
+		/*
 		Sql.creationDatabase();
 		Sql.creationTableChat();
 		Sql.insererMessage("Adrien","Wesh");
 		Sql.recuperationMessage();
+		
+		*/
+		
+		recuperationBooking();
 		
 	
 	}
