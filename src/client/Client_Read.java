@@ -4,29 +4,33 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
+
+import main.ModelMessage;
 
 public class Client_Read extends Thread {
 	
 
-	DataInputStream in;
+	ObjectInputStream in;
 	
-	public Client_Read(DataInputStream in){
+	public Client_Read(ObjectInputStream in){
 		this.in = in;
 	}
 	
 
 	public void run() {
 				
-		String message;
+		ModelMessage message;
 		
 		while(true){
 			
 			try {
-				message = in.readUTF();
+				message = (ModelMessage) in.readObject();
 				System.out.println(message);
 			} catch (IOException e) { System.out.println("Error getting a line"); }
+			 catch (ClassNotFoundException e) {System.out.println("Could not read object");	}
 		
 		}
 	}

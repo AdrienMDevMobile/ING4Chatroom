@@ -5,13 +5,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Scanner;
 
 import serveur.Serveur;
 import main.Main;
+import main.ModelMessage;
 
 public class Client extends Thread {
 	
@@ -44,19 +48,19 @@ public class Client extends Thread {
 	public void run() {
 		try {
 			
-			Client_Read cr = new Client_Read(new DataInputStream(socket.getInputStream()));
+			Client_Read cr = new Client_Read(new ObjectInputStream(socket.getInputStream()));
 			cr.start();
 			
 			
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-			String message;
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ModelMessage message;
 			Scanner sc = new Scanner(System.in);
 			
 			while(true){
-				message = sc.nextLine();
+				message = new ModelMessage("TODO", sc.nextLine(), (new Date()).toString());
 				
 				System.out.println("Sent");
-				out.writeUTF(message);	
+				out.writeObject(message);	
 			}
 			
 			
