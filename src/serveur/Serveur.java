@@ -47,8 +47,30 @@ public class Serveur extends Thread {
 				
 			} catch (IOException e) {System.out.println("Could not connect a new user");	}
 		
+
+		int numerotock = 1;
+		
+		try {
+			ServerSocket ss = new ServerSocket(Main.PORT_ENTREE);
+			System.out.println("Server on");
+			
+			Socket socket = ss.accept();
+			
+			SalleDeDiscussion salle = new SalleDeDiscussion(
+					new DataOutputStream(socket.getOutputStream()), new DataInputStream(socket.getInputStream())
+					);
+			
+
+			salle.start();
+			
+		
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
 		}
 		
 		
 	}
-}
+	}}

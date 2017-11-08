@@ -9,8 +9,9 @@ import java.net.Socket;
 //Classe de type package car elle ne sera utilisée que par la classe Serveur.
 class SalleDeDiscussion extends Thread {
 	
-	DataOutputStream out;
-	DataInputStream in;
+	private MessageSender messageSender = new  MessageSender();
+	private DataOutputStream out;
+	private DataInputStream in;
 
 	public SalleDeDiscussion(DataOutputStream out, DataInputStream in) throws IOException {
 		this.out = out;
@@ -20,6 +21,7 @@ class SalleDeDiscussion extends Thread {
 	@Override
 	public void run() {
 		try {
+			
 			
 			System.out.println("connection made");
 			out.writeUTF("Connection made");
@@ -34,6 +36,9 @@ class SalleDeDiscussion extends Thread {
 				out.writeUTF(message);
 			
 			}
+			
+			
+	//		messageSender.listReader();
 			
 			
 		} catch (IOException e) {

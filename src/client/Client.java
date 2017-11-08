@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -53,14 +54,22 @@ public class Client extends Thread {
 			
 			
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			ModelMessage message;
+			String message;
 			Scanner sc = new Scanner(System.in);
 			
+			//Recupération de la date
+		    Date dNow = new Date( );
+		    //Formatage de la date
+		    SimpleDateFormat dateFormatee = new SimpleDateFormat ("yyyy.MM.dd ':' hh:mm:ss");
+		      
+			
 			while(true){
-				message = new ModelMessage("TODO", sc.nextLine(), (new Date()).toString());
+				message = sc.nextLine();
 				
-				System.out.println("Sent");
-				out.writeObject(message);	
+				//Création de l'objet
+				ModelMessage modelMessage = new ModelMessage("Adrien et Lucas",message,dateFormatee.toString());
+				//Envoi du message
+				out.writeObject(modelMessage);
 			}
 			
 			

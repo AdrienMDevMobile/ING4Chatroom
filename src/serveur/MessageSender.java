@@ -21,7 +21,7 @@ public class MessageSender  {
 	
 	
 	//Lecture d ela liste de socket
-	public void listReader(ModelMessage model) throws IOException{
+	public synchronized void listReader(ModelMessage model) throws IOException{
 		
 		
 		for(int i = 0; i < socketList.size(); i++){
@@ -36,7 +36,7 @@ public class MessageSender  {
 		
 	
 	
-		public void sendMessage(ModelMessage objectMessage, Socket s) throws IOException{
+		public synchronized void sendMessage(ModelMessage objectMessage, Socket s) throws IOException{
 			
 
 			//Utilisation de la socket dans la liste des sockets
