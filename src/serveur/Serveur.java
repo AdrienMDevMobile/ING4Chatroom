@@ -14,10 +14,12 @@ import java.net.UnknownHostException;
 
 import client.Client;
 import main.Main;
+import main.Output;
 
 public class Serveur extends Thread {
 	
 	MessageSender messageSender = new MessageSender();
+	int lastConnectionSign = 0;
 	
 	public static void main(String[] args) {
 		
@@ -29,28 +31,34 @@ public class Serveur extends Thread {
 	@Override
 	public void run() {
 		
-		
-		
+		ServerSocket ss;
+		try {
+			ss = new ServerSocket(Main.PORT_ENTREE);
+			System.out.println("Server on");
+			
 		while(true){
-		
-			try {
-				ServerSocket ss = new ServerSocket(Main.PORT_ENTREE);
-				System.out.println("Server on");
+
 				
 				Socket socket = ss.accept();
 				
-				messageSender.addStream(new ObjectOutputStream(socket.getOutputStream()));
+				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+				
+				int sign = lastConnectionSign++;
+				
+				messageSender.addStream(new Output(out, sign));
 				
 				SalleDeDiscussion salle = new SalleDeDiscussion(
-						new ObjectInputStream(socket.getInputStream()), messageSender
+						sign, new ObjectInputStream(socket.getInputStream()), messageSender
 						);
 				
 	
 				salle.start();
-				
-				
-			} catch (IOException e) {System.out.println("Could not connect a new user");	}
 		
 		
-	}
+		}
+		} catch (IOException e1) {System.out.println("Could not start server socket");}
+		
+		
+		
+
 	}}

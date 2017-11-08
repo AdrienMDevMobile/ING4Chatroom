@@ -57,6 +57,9 @@ public class Client extends Thread {
 			String message;
 			Scanner sc = new Scanner(System.in);
 			
+			System.out.println("Votre pseudo svp");
+			String pseudo = sc.nextLine();
+			
 			//Recupération de la date
 		    Date dNow = new Date( );
 		    //Formatage de la date
@@ -67,7 +70,7 @@ public class Client extends Thread {
 				message = sc.nextLine();
 				
 				//Création de l'objet
-				ModelMessage modelMessage = new ModelMessage("Adrien et Lucas",message,dateFormatee.toString());
+				ModelMessage modelMessage = new ModelMessage(pseudo,message,dateFormatee.format(dNow));
 				//Envoi du message
 				out.writeObject(modelMessage);
 			}

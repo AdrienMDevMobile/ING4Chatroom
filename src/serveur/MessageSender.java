@@ -2,6 +2,7 @@ package serveur;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -9,25 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.ModelMessage;
+import main.Output;
 
 public class MessageSender  {
 
-	private List<ObjectOutputStream> outputList;
+	private List<Output> outputList;
 	
 	public MessageSender(){
-		outputList = new ArrayList<ObjectOutputStream>();
+		outputList = new ArrayList<Output>();
 	}
 	
-	public synchronized void addStream(ObjectOutputStream out){
+	public synchronized void addStream(Output out){
 		outputList.add(out);
 	}
 	
 	
 	//Lecture d ela liste de socket
-	public synchronized void sendMessageToList(ModelMessage model) throws IOException{
+	public synchronized void sendMessageToList(ModelMessage message, int sign) throws IOException{
 		
 		for(int i = 0; i < outputList.size(); i++){
-			sendMessage(model,outputList.get(i));
+			System.out.println("Test");
+			
+			if(outputList.get(i).getSign() != sign){
+				sendMessage(message, outputList.get(i).getOut());
+				System.out.println("sent");
+			}	
 		}
 		
 	}

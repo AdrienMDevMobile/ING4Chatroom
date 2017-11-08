@@ -1,16 +1,22 @@
 package serveur;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
 import main.ModelMessage;
 
 //Classe de type package car elle ne sera utilisée que par la classe Serveur.
 class SalleDeDiscussion extends Thread {
 	
+	private int sign;
 	private ObjectInputStream in;
 	private MessageSender messageSender;
 
-	public SalleDeDiscussion(ObjectInputStream in, MessageSender messageSender) throws IOException {
+	public SalleDeDiscussion(int sign, ObjectInputStream in, MessageSender messageSender) throws IOException {
+		this.sign = sign;
 		this.in = in;
 		this.messageSender = messageSender;
 	}
@@ -31,7 +37,7 @@ class SalleDeDiscussion extends Thread {
 					
 					System.out.println("Received");
 					
-					messageSender.sendMessageToList(message);
+					messageSender.sendMessageToList(message, sign);
 				} catch (ClassNotFoundException e) {System.out.println("Could not receive message");}
 			
 			}		
