@@ -24,6 +24,7 @@ public class Client_Read extends Thread {
 				
 		ModelMessage message;
 		
+		//Waits for a message, receives it and publishes it.
 		while(true){
 			
 			try {
