@@ -28,7 +28,7 @@ public class Client_Read extends Thread {
 			
 			try {
 				message = (ModelMessage) in.readObject();
-				System.out.println(message);
+				System.out.println(message.getPseudo() + " , " + message.getDate() + " :\n" + message.getMessage());
 			} catch (IOException e) { System.out.println("Error getting a line"); }
 			 catch (ClassNotFoundException e) {System.out.println("Could not read object");	}
 		
