@@ -5,6 +5,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,7 +17,7 @@ import main.Main;
 
 public class Serveur extends Thread {
 	
-	MessageSender ms = new MessageSender();
+	MessageSender messageSender = new MessageSender();
 	
 	public static void main(String[] args) {
 		
@@ -37,8 +39,10 @@ public class Serveur extends Thread {
 				
 				Socket socket = ss.accept();
 				
+				messageSender.addStream(new ObjectOutputStream(socket.getOutputStream()));
+				
 				SalleDeDiscussion salle = new SalleDeDiscussion(
-						new DataOutputStream(socket.getOutputStream()), new DataInputStream(socket.getInputStream())
+						new ObjectInputStream(socket.getInputStream()), messageSender
 						);
 				
 	
@@ -46,30 +50,6 @@ public class Serveur extends Thread {
 				
 				
 			} catch (IOException e) {System.out.println("Could not connect a new user");	}
-		
-
-		int numerotock = 1;
-		
-		try {
-			ServerSocket ss = new ServerSocket(Main.PORT_ENTREE);
-			System.out.println("Server on");
-			
-			Socket socket = ss.accept();
-			
-			SalleDeDiscussion salle = new SalleDeDiscussion(
-					new DataOutputStream(socket.getOutputStream()), new DataInputStream(socket.getInputStream())
-					);
-			
-
-			salle.start();
-			
-		
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
 		
 		
 	}

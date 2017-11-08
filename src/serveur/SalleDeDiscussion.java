@@ -1,45 +1,40 @@
 package serveur;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.ObjectInputStream;
+import main.ModelMessage;
 
 //Classe de type package car elle ne sera utilisée que par la classe Serveur.
 class SalleDeDiscussion extends Thread {
 	
-	private MessageSender messageSender = new  MessageSender();
-	private DataOutputStream out;
-	private DataInputStream in;
+	private ObjectInputStream in;
+	private MessageSender messageSender;
 
-	public SalleDeDiscussion(DataOutputStream out, DataInputStream in) throws IOException {
-		this.out = out;
+	public SalleDeDiscussion(ObjectInputStream in, MessageSender messageSender) throws IOException {
 		this.in = in;
+		this.messageSender = messageSender;
 	}
 	
 	@Override
 	public void run() {
-		try {
-			
+		try {	
 			
 			System.out.println("connection made");
-			out.writeUTF("Connection made");
+			
+			//TODO : recuperer les dix derniers messages dans la BDD et les envoyer à l'utilisateur.
 			
 			while(true){
-				/*
-				new SalleDeDiscussion(numerotock++, ss.accept()); */
 				
-				String message = in.readUTF();
-				
-				System.out.println("Received");
-				out.writeUTF(message);
+				ModelMessage message;
+				try {
+					message = (ModelMessage) in.readObject();
+					
+					System.out.println("Received");
+					
+					messageSender.sendMessageToList(message);
+				} catch (ClassNotFoundException e) {System.out.println("Could not receive message");}
 			
-			}
-			
-			
-	//		messageSender.listReader();
-			
+			}		
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

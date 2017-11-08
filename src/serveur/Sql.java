@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
 
 public class Sql {
 	
@@ -77,7 +76,7 @@ public static void insererMessage(String utilisateur, String message) throws SQL
 		
 	}
 
-public static void recuperationMessage() throws SQLException{
+public static void recuperationMessage() throws SQLException{ /*
 	
 	Statement stmt = null;
 	Connection con = null;
@@ -120,7 +119,7 @@ con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "");
 	
 	stmt.close();
 	con.close();
-	
+*/	
 }
 
 

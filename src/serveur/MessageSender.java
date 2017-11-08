@@ -12,40 +12,31 @@ import main.ModelMessage;
 
 public class MessageSender  {
 
-	private List<Socket> socketList;
+	private List<ObjectOutputStream> outputList;
 	
 	public MessageSender(){
-		socketList = new ArrayList<Socket>();
+		outputList = new ArrayList<ObjectOutputStream>();
 	}
 	
+	public synchronized void addStream(ObjectOutputStream out){
+		outputList.add(out);
+	}
 	
 	
 	//Lecture d ela liste de socket
-	public synchronized void listReader(ModelMessage model) throws IOException{
+	public synchronized void sendMessageToList(ModelMessage model) throws IOException{
 		
-		
-		for(int i = 0; i < socketList.size(); i++){
-			
-			Socket s = socketList.get(i);
-			sendMessage(model,s);
-			
+		for(int i = 0; i < outputList.size(); i++){
+			sendMessage(model,outputList.get(i));
 		}
 		
 	}
-		
-		
-	
-	
-		public synchronized void sendMessage(ModelMessage objectMessage, Socket s) throws IOException{
-			
 
-			//Utilisation de la socket dans la liste des sockets
-	         OutputStream envoiAuClient = s.getOutputStream();
-	         ObjectOutputStream out = new ObjectOutputStream(envoiAuClient);
-	         
+	private synchronized void sendMessage(ModelMessage objectMessage, ObjectOutputStream out) throws IOException{
+        
 	         //Envoi de l'objet message au client
 	         out.writeObject(objectMessage);
 			
-		}
+	}
 	
 }
