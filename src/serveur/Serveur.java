@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 
 import client.Client;
 import main.Main;
@@ -30,6 +31,14 @@ public class Serveur extends Thread {
 
 	@Override
 	public void run() {
+		
+		try {
+			Sql.creationDatabase();
+			Sql.creationTableChat();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		ServerSocket ss;
 		try {
