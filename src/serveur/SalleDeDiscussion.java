@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import main.ModelMessage;
 
@@ -29,6 +30,10 @@ class SalleDeDiscussion extends Thread {
 			
 			//TODO : recuperer les dix derniers messages dans la BDD et les envoyer à l'utilisateur.
 			
+			messageSender.send10LastMessages(sign);
+			
+			
+			
 			while(true){
 				
 				ModelMessage message;
@@ -38,13 +43,24 @@ class SalleDeDiscussion extends Thread {
 					System.out.println("Received");
 					
 					messageSender.sendMessageToList(message, sign);
-				} catch (ClassNotFoundException e) {System.out.println("Could not receive message");}
+					
+					Sql.insererMessage(message.getPseudo() ,message.getMessage(), message.getDate());
+					
+				} catch (ClassNotFoundException e) {
+					System.out.println("Could not receive message");
+				} catch (SQLException e) {
+					System.out.println("Probleme");
+				}
+				
 			
 			}		
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 	}

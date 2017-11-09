@@ -41,11 +41,10 @@ public class Serveur extends Thread {
 				
 				Socket socket = ss.accept();
 				
-				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-				
 				int sign = lastConnectionSign++;
 				
-				messageSender.addStream(new Output(out, sign));
+				messageSender.addStream(new Output(
+						new ObjectOutputStream(socket.getOutputStream()), sign));
 				
 				SalleDeDiscussion salle = new SalleDeDiscussion(
 						sign, new ObjectInputStream(socket.getInputStream()), messageSender

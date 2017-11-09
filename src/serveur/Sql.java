@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import main.ModelMessage;
+
 
 
 
@@ -59,15 +59,13 @@ public class Sql {
 		
 	}
 	
-public static void insererMessage(String utilisateur, String message) throws SQLException{
+public static void insererMessage(String utilisateur, String message,String date) throws SQLException{
 		
 		Statement stmt = null;
 		Connection con = null;
 		
-		Date date = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
 		
-		String requete = "INSERT INTO " + nomTable + " (utilisateur,message,date) VALUES('"+utilisateur+"','"+message+"',NOW())" ;
+		String requete = "INSERT INTO " + nomTable + " (utilisateur,message,date) VALUES('"+utilisateur+"','"+message+"','"+date+"')" ;
 		
 		con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
 		
@@ -79,22 +77,19 @@ public static void insererMessage(String utilisateur, String message) throws SQL
 		
 	}
 
-public static void recuperationMessage() throws SQLException{ 
+public static List<ModelMessage> recuperation10Messages() throws SQLException{ 
+	
+	List<ModelMessage> listModelMessage = new ArrayList<ModelMessage>();
 	
 	Statement stmt = null;
 	Connection con = null;
 	
-con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
-	
+	con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
 	stmt = con.createStatement();
-	
-	
 
-	JSONArray jarray = new JSONArray();
+	System.out.println("OK OK OK OK");
 	
-
-	
-	String requete = "SELECT * FROM " + nomTable ;
+	String requete = "SELECT * FROM " + nomTable + " ORDER BY id DESC LIMIT 5 " ;
 	ResultSet rs = stmt.executeQuery(requete);
     //STEP 5: Extract data from result set
     while(rs.next()){
@@ -102,27 +97,16 @@ con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "");
        String utilisateur  = rs.getString("utilisateur");
        String message = rs.getString("message");
        String date = rs.getString("date");
-
-       //Display values
-     //  System.out.print("Utilisateur : " + utilisateur);
-     //  System.out.print(", Message: " + message);
-     //  System.out.print(", Date: " + date);
+       System.out.println(message);
+       ModelMessage unModelMessage = new ModelMessage(utilisateur,message,date);
+       listModelMessage.add(unModelMessage);
        
-       JSONObject jobject = new JSONObject();
-   		jobject.put("utilisateur", utilisateur);
-   		jobject.put("message", message);
-   		jobject.put("date", date);
-   		
-   		jarray.add(jobject);
-
     }
     
-   
-    System.out.println(jarray.toString());
-	
 	stmt.close();
 	con.close();
 	
+	return listModelMessage;
 }
 
 
@@ -135,12 +119,14 @@ con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "");
 	
 	public static void main(String[] args) throws Exception  {
 
+		/*
 		
 		Sql.creationDatabase();
 		Sql.creationTableChat();
-		Sql.insererMessage("MAMADOU","J ai mal aux dents ");
+	//	Sql.insererMessage("MAMADOU","J ai mal aux dents ");
 		Sql.recuperationMessage();
 		
+		*/
 		
 	
 	}

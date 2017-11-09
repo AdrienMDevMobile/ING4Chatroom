@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,35 @@ public class MessageSender  {
 	         //Envoi de l'objet message au client
 	         out.writeObject(objectMessage);
 			
+	}
+	
+	
+	public synchronized void send10LastMessages(int sign) throws IOException, SQLException{
+        
+		
+		for(int i = 0; i < outputList.size(); i++){
+			System.out.println("Test");
+			
+			if(outputList.get(i).getSign() == sign){
+				
+				List<ModelMessage> listModelMessage= Sql.recuperation10Messages();
+				
+				System.out.println("Size list " + listModelMessage.size());
+				for(int j =listModelMessage.size()-1;j>=0;j--){
+					
+					
+					System.out.println("OK OK OK OK");
+					sendMessage(listModelMessage.get(j), outputList.get(i).getOut());
+					System.out.println("sent");
+					
+				}
+				
+			
+				break;
+			}	
+		}
+
+		
 	}
 	
 }

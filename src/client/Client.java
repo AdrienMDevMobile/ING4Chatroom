@@ -48,6 +48,10 @@ public class Client extends Thread {
 	@Override
 	public void run() {
 		try {
+			Scanner sc = new Scanner(System.in);
+			
+			System.out.println("Votre pseudo svp");
+			String pseudo = sc.nextLine();
 			
 			Client_Read cr = new Client_Read(new ObjectInputStream(socket.getInputStream()));
 			cr.start();
@@ -55,10 +59,7 @@ public class Client extends Thread {
 			
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			String message;
-			Scanner sc = new Scanner(System.in);
-			
-			System.out.println("Votre pseudo svp");
-			String pseudo = sc.nextLine();
+
 			
 			//Recupération de la date
 		    Date dNow = new Date( );
@@ -74,8 +75,6 @@ public class Client extends Thread {
 				//Envoi du message
 				out.writeObject(modelMessage);
 			}
-			
-			
 			
 		} catch (IOException e) {
 			
