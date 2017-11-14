@@ -12,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import client.Client;
 import main.Main;
@@ -19,7 +21,7 @@ import main.Output;
 
 public class Serveur extends Thread {
 	
-	MessageSender messageSender = new MessageSender();
+	List<MessageSender> listMessageSender = new ArrayList<MessageSender>();
 	int lastConnectionSign = 0;
 	
 	public static void main(String[] args) {
@@ -27,6 +29,16 @@ public class Serveur extends Thread {
 			Serveur s = new Serveur();
 			s.start();
 		
+	}
+	
+	public Serveur(){
+		String[] listTopics = SalleDeDiscussion.getlistDiscussionsPossibles();
+		
+		 for(int i = 0; i<listTopics.length; ++i){
+			 System.out.println(i);
+		 		listMessageSender.add(new MessageSender(i, listMessageSender));
+		 }
+		 
 	}
 
 	@Override
@@ -52,11 +64,11 @@ public class Serveur extends Thread {
 				
 				int sign = lastConnectionSign++;
 				
-				messageSender.addStream(new Output(
+				listMessageSender.get(0).addStream(new Output(
 						new ObjectOutputStream(socket.getOutputStream()), sign));
 				
 				SalleDeDiscussion salle = new SalleDeDiscussion(
-						sign, new ObjectInputStream(socket.getInputStream()), messageSender
+						sign, new ObjectInputStream(socket.getInputStream()), listMessageSender.get(0)
 						);
 				
 	

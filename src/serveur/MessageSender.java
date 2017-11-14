@@ -8,25 +8,50 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import main.ModelMessage;
 import main.Output;
 
 public class MessageSender  {
-
-	private List<Output> outputList;
 	
-	public MessageSender(){
+	private int topic;
+	private List<Output> outputList;
+	List<MessageSender> listMessageSender;
+	
+	
+	public MessageSender(int topic, List<MessageSender> listMessageSender){
+		this.topic = topic;
 		outputList = new ArrayList<Output>();
+		this.listMessageSender = listMessageSender;
+	}
+	
+	public int getTopic(){
+		return this.topic;
 	}
 	
 	public synchronized void addStream(Output out){
 		outputList.add(out);
 	}
 	
+	public synchronized MessageSender removeStream(int sign, int newRoom){
+		if(newRoom < 0 || newRoom > listMessageSender.size())
+			return this;
+		
+		for (int i = 0; i < outputList.size(); ++i) {
+			if(outputList.get(i).getSign() == sign){
+				Output move = outputList.remove(i);
+				listMessageSender.get(newRoom).addStream(move);
+				return listMessageSender.get(newRoom);
+			}
+			
+		}
+		return this;
+	}
 	
-	//Lecture d ela liste de socket
+	
+	//Lecture de la liste de socket
 	public synchronized void sendMessageToList(ModelMessage message, int sign) throws IOException{
 		
 		for(int i = 0; i < outputList.size(); i++){

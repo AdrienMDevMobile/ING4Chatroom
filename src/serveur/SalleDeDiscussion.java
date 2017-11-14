@@ -15,6 +15,12 @@ class SalleDeDiscussion extends Thread {
 	private int sign;
 	private ObjectInputStream in;
 	private MessageSender messageSender;
+	
+	private static String[] listDiscussionsPossibles = { "main", "programmation", "réseau", "mathematiques", "porno"};
+	
+	public static String[] getlistDiscussionsPossibles(){
+		return listDiscussionsPossibles;
+	}
 
 	public SalleDeDiscussion(int sign, ObjectInputStream in, MessageSender messageSender) throws IOException {
 		this.sign = sign;
@@ -40,11 +46,20 @@ class SalleDeDiscussion extends Thread {
 				try {
 					message = (ModelMessage) in.readObject();
 					
-					System.out.println("Received");
 					
-					messageSender.sendMessageToList(message, sign);
+					if(message.getMessage().contains("-") && (message.getMessage().split("-"))[0].equals("join")){
+						int newRoom = Integer.parseInt(message.getMessage().split("-")[1]);
+						
+						messageSender= messageSender.removeStream(this.sign, newRoom);
+						System.out.println("new room "+ messageSender.getTopic());
+					}
+					else {
+						messageSender.sendMessageToList(message, sign);
+						
+						Sql.insererMessage(message.getPseudo() ,message.getMessage(), message.getDate());
+					}
 					
-					Sql.insererMessage(message.getPseudo() ,message.getMessage(), message.getDate());
+					
 					
 				} catch (ClassNotFoundException e) {
 					System.out.println("Could not receive message");

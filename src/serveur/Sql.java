@@ -32,7 +32,7 @@ public class Sql {
 		
 		String requete = "CREATE DATABASE IF NOT EXISTS " + nomDatabase ;
 		
-		con = DriverManager.getConnection(DB_URL , "root" , ""); 
+		con = DriverManager.getConnection(DB_URL , "root" , "root"); 
 		
 		stmt = con.createStatement();
 	
@@ -48,7 +48,7 @@ public class Sql {
 		
 		String requete = "CREATE TABLE IF NOT EXISTS " + nomTable + " (id  INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,utilisateur VARCHAR(20), message VARCHAR(1000), date DATETIME)" ;
 		
-		con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
+		con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "root"); 
 		
 		stmt = con.createStatement();
 	
@@ -67,7 +67,7 @@ public static void insererMessage(String utilisateur, String message,String date
 		
 		String requete = "INSERT INTO " + nomTable + " (utilisateur,message,date) VALUES('"+utilisateur+"','"+message+"','"+date+"')" ;
 		
-		con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
+		con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "root"); 
 		
 		stmt = con.createStatement();
 	
@@ -84,7 +84,7 @@ public static List<ModelMessage> recuperation10Messages() throws SQLException{
 	Statement stmt = null;
 	Connection con = null;
 	
-	con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , ""); 
+	con = DriverManager.getConnection(DB_URL+nomDatabase , "root" , "root"); 
 	stmt = con.createStatement();
 
 	System.out.println("OK OK OK OK");
@@ -110,27 +110,24 @@ public static List<ModelMessage> recuperation10Messages() throws SQLException{
 }
 
 
-
-
-
 //sdsfsdfsf
 
 	
-	
+/*
 	public static void main(String[] args) throws Exception  {
 
-		/*
+	
 		
 		Sql.creationDatabase();
 		Sql.creationTableChat();
 	//	Sql.insererMessage("MAMADOU","J ai mal aux dents ");
 		Sql.recuperationMessage();
 		
-		*/
+		
 		
 	
 	}
-	
+	*/
 	
 
 
